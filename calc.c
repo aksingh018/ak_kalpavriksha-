@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include<ctype.h>
 
 void push_int(float *arr, int *top, float val)
 {
@@ -29,7 +28,7 @@ char pop_char(char *arr, int *top)
     return res;
 }
 
-int order(char c)
+int PriorityOfOperators(char c)
 {
     if(c == '+' || c == '-')
     {
@@ -42,28 +41,28 @@ int order(char c)
     return 0;
 }
 
-float solve(float a, float b, char x)
+float PerformOperation(float num1, float num2, char operator)
 {
-    if(x == '+')
+    if(operator == '+')
     {
-        return a+b;
+        return num1+num2;
     }
-    else if(x == '-')
+    else if(operator == '-')
     {
-        return a-b;
+        return num1-num2;
     }
-    else if(x == '*')
+    else if(operator == '*')
     {
-        return a*b;
+        return num1*num2;
     }
     else
     {
-        if(b==0)
+        if(num2==0)
         {
             printf("Error: Division by zero");
             exit(1);
         }
-        return (int)(a/b);
+        return (int)(num1/num2);
     }
     return 0;
 }
@@ -73,7 +72,7 @@ int main()
     int size = 100;
     char *exp = (char *)malloc(size * sizeof(char));
     printf("Enter Expression \n");
-    scanf("%s", exp);
+    scanf("%[^\n]", exp);
 
     float *num = (float *)malloc(size*sizeof(float));
     int num_top = -1;
@@ -83,7 +82,11 @@ int main()
 
     for(int i=0 ; i<strlen(exp) ; i++)
     {
-        if(isspace(exp[i]))
+        // if(isspace(exp[i]))
+        // {
+        //     continue;
+        // }
+        if(exp[i] == ' ' || exp[i] == '\n' || exp[i] == '\t') 
         {
             continue;
         }
@@ -102,12 +105,12 @@ int main()
             }
             else
             {
-                while(operator_top != -1 && order(operator[operator_top]) >= order(exp[i]))
+                while(operator_top != -1 && PriorityOfOperators(operator[operator_top]) >= PriorityOfOperators(exp[i]))
                 {
                     char x = pop_char(operator, &operator_top);
                     float b = pop_int(num, &num_top);
                     float a = pop_int(num, &num_top);
-                    push_int(num, &num_top, solve(a,b,x));
+                    push_int(num, &num_top, PerformOperation(a,b,x));
                 }
                 push_char(operator, &operator_top, exp[i]);
             }
@@ -124,7 +127,7 @@ int main()
         char x = pop_char(operator, &operator_top);
         float b = pop_int(num, &num_top);
         float a = pop_int(num, &num_top);
-        push_int(num, &num_top, solve(a,b,x));
+        push_int(num, &num_top, PerformOperation(a,b,x));
     }
 
     float sol = pop_int(num, &num_top);
