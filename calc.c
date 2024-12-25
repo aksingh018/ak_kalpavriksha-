@@ -2,30 +2,30 @@
 #include<stdlib.h>
 #include<string.h>
 
-void push_int(float *arr, int *top, float val)
+void push_int(float *arr, int *top, float value)
 {
     (*top)++;
-    arr[*top] = val;
+    arr[*top] = value;
 }
 
 float pop_int(float *arr, int *top)
 {
-    float res = arr[*top];
+    float result = arr[*top];
     (*top)--;
-    return res;
+    return result;
 }
 
-void push_char(char *arr, int *top, int val)
+void push_char(char *arr, int *top, int value)
 {
     (*top)++;
-    arr[*top] = val;
+    arr[*top] = value;
 }
 
 char pop_char(char *arr, int *top)
 {
-    char res = arr[*top];
+    char result = arr[*top];
     (*top)--;
-    return res;
+    return result;
 }
 
 int PriorityOfOperators(char c)
@@ -107,10 +107,10 @@ int main()
             {
                 while(operator_top != -1 && PriorityOfOperators(operator[operator_top]) >= PriorityOfOperators(exp[i]))
                 {
-                    char x = pop_char(operator, &operator_top);
-                    float b = pop_int(num, &num_top);
-                    float a = pop_int(num, &num_top);
-                    push_int(num, &num_top, PerformOperation(a,b,x));
+                    char operator_sign = pop_char(operator, &operator_top);
+                    float num2 = pop_int(num, &num_top);
+                    float num1 = pop_int(num, &num_top);
+                    push_int(num, &num_top, PerformOperation(num1,num2,operator_sign));
                 }
                 push_char(operator, &operator_top, exp[i]);
             }
@@ -124,10 +124,10 @@ int main()
 
     while(operator_top != -1)
     {
-        char x = pop_char(operator, &operator_top);
-        float b = pop_int(num, &num_top);
-        float a = pop_int(num, &num_top);
-        push_int(num, &num_top, PerformOperation(a,b,x));
+        char operator_sign = pop_char(operator, &operator_top);
+        float num2 = pop_int(num, &num_top);
+        float num1 = pop_int(num, &num_top);
+        push_int(num, &num_top, PerformOperation(num1,num2,operator_sign));
     }
 
     float sol = pop_int(num, &num_top);
